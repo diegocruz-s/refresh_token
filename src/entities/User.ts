@@ -5,7 +5,7 @@ interface IReturnIsValidUser {
   valid: boolean;
 };
 
-interface IDatasCreateUser {
+export interface IDatasCreateUser {
   email: string;
   username: string;
   password: string;

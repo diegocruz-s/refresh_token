@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "build": "tsc -p ."
   },
   "keywords": [],
   "author": "",
@@ -17,5 +18,8 @@
     "jest": "^29.7.0",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "zod": "^3.22.4"
   }
 }
