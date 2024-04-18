@@ -12,7 +12,7 @@ export class CreateUserUseCase implements ICreateUserUseCase {
       email, username
     );
 
-    if (userAlreadyExists) throw new Error('User Already exists');
+    if (userAlreadyExists) throw new Error('User already exists!');
 
     const newUser = new User({
       email, password, username,

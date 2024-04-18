@@ -6,11 +6,13 @@ export interface IReturnError {
 };
 
 export class ErrorHandler {
-  async execute (errorMsg: string): Promise<IReturnError> {
+  async execute (error: Error): Promise<IReturnError> {    
+    const statusCode = error.name === 'ValidationError' ? 422 : 500;
+
     return {
-      statusCode: 500,
+      statusCode,
       body: {
-        errors: [errorMsg],
+        errors: [error.message],
       },
     };
   };

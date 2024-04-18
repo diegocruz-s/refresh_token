@@ -8,7 +8,7 @@ import { z } from 'zod';
 const createUserSchema = z.object({
   email: z.string().email(),
   password: z.string().min(6),
-  username: z.string(),
+  username: z.string().min(3),
 });
 
 export class CreateUserController implements ICreateUserController {
@@ -19,8 +19,8 @@ export class CreateUserController implements ICreateUserController {
   async handle(httpRequest: HttpRequest<IDatasCreateUser>): Promise<HttpResponse<IReturnCreateUser>> {
     try {
       const { body } = httpRequest;
+      if(!body) throw new Error('Body is not provided!');
 
-      // Validation Body
       const checkValidationBody = await validation({
         body: body,
         schema: createUserSchema
@@ -34,9 +34,7 @@ export class CreateUserController implements ICreateUserController {
           },
         };
       };
-      // End Validation Body
 
-      // UseCase
       const { userId } = await this.createUserUseCase.execute(body!);
       
       return {
@@ -46,9 +44,13 @@ export class CreateUserController implements ICreateUserController {
           errors: null,
         },
       };
-    } catch (error: any) {
+    } catch (error: any) {      
+      if(
+        error.message.includes('provided') || error.message.toLowerCase().includes('already')
+      ) error.name = 'ValidationError';
+
       const errorHandler = new ErrorHandler();
-      const { body, statusCode } = await errorHandler.execute(error.message);
+      const { body, statusCode } = await errorHandler.execute(error);
       
       return {
         body, statusCode
