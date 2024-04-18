@@ -19,3 +19,6 @@ export interface ICreateUserUseCase {
   execute(datas: IDatasCreateUser): Promise<{ userId: string }>
 };
 
+export interface IHashPassword {
+  hash(password: string): Promise<string>;
+};

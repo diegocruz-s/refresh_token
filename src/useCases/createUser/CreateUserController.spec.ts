@@ -1,7 +1,7 @@
 import { User } from "../../entities/User";
 import { CreateUserController } from "./CreateUserController";
 import { CreateUserUseCase } from "./CreateUserUseCase";
-import { ICreateUserRepository } from "./protocols";
+import { ICreateUserRepository, IHashPassword } from "./protocols";
 
 const makeFakeRepository = () => {
   class CreateUserRepository implements ICreateUserRepository {
@@ -32,10 +32,17 @@ const makeFakeRepository = () => {
 
 const makeFakeCreateUserUseCase = () => {
   const { createUserRepository } = makeFakeRepository();
-  const createUserUseCase = new CreateUserUseCase(createUserRepository);
+  class HashPassword implements IHashPassword {
+    async hash(password: string): Promise<string> {
+      return `${password + Date.now().toString()}`;
+    };
+  };
+  const hashPassword = new HashPassword();
 
+  const createUserUseCase = new CreateUserUseCase(createUserRepository, hashPassword);
   return {
-    createUserUseCase  };
+    createUserUseCase  
+  };
 };
 
 const makeControllerWithMocks = () => {
