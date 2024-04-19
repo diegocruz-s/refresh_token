@@ -1,9 +1,10 @@
+import { z } from 'zod';
+
 import { IDatasCreateUser } from "../../entities/User";
 import { validation } from "../../helpers/validation";
 import { ErrorHandler } from "../errors/ErrorHandler";
 import { HttpRequest, HttpResponse } from "../globalInterfaces";
 import { ICreateUserController, ICreateUserUseCase, IReturnCreateUser } from "./protocols";
-import { z } from 'zod';
 
 const createUserSchema = z.object({
   email: z.string().email(),
@@ -58,3 +59,4 @@ export class CreateUserController implements ICreateUserController {
     };
   };
 };
+
