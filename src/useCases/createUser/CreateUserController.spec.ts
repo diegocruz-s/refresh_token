@@ -156,7 +156,7 @@ describe('Create User Controller', () => {
     expect(statusCode).toBe(422);
     expect(body.errors?.length).toBe(3);
     body.errors!.forEach((err, i) => {
-      expect(err.includes(Object.values(datasUser)[i]));
+      expect(err.includes(Object.keys(datasUser)[i]));
     });
   });
 
