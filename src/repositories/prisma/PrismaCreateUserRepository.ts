@@ -6,7 +6,7 @@ export class PrismaCreateUserRepository implements ICreateUserRepository {
   constructor(
     private readonly prismaClient: PrismaClient
   ) {}
-  
+
   async createUser(user: User): Promise<string> {
     const { email, id, password, username } = user;
     const newUser = await this.prismaClient.user.create({
@@ -21,7 +21,7 @@ export class PrismaCreateUserRepository implements ICreateUserRepository {
   async userExists(email: string, username: string): Promise<boolean> {
     const user = await this.prismaClient.user.findFirst({
       where: {
-        AND: [
+        OR: [
           { email }, { username },
         ],
       },
