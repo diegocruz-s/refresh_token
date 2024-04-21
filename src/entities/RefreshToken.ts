@@ -33,7 +33,7 @@ export class RefreshToken {
 
     const isValidExpiresIn = this.expiresIn.getTime() > Date.now(); 
 
-    if (!isValidExpiresIn) {
+    if (!isValidExpiresIn || !this.expiresIn) {
       errors.push('Property expiresIn must be greater than now!');
     };
 
