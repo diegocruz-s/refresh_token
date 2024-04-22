@@ -25,7 +25,7 @@ export class AuthenticateUseCase implements IAuthenticateUseCase {
     const token = await this.generateToken.execute(user.id, 'any_secret_token', '7d');
     const refreshToken = await this.authenticateRepository.createRefreshToken(
       user.id, expiresInRefreshToken
-    );
+    );    
 
     return {
       token,
