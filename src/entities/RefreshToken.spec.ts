@@ -5,8 +5,10 @@ describe('Refresh Token', () => {
   it('should create a Refresh Token', async () => {
     const { user } = createUser({});
     const expiresIn = new Date(Date.now() + 20000);
+    const id = 'any_id_refreshToken';
 
     const refreshToken = new RefreshToken({
+      id,
       expiresIn,
       userId: user.id,
     });
@@ -16,6 +18,7 @@ describe('Refresh Token', () => {
     expect(valid).toBeTruthy();
     expect(errors).toBeNull();
     expect(refreshToken).toHaveProperty('id');
+    expect(refreshToken.id).toBe(id);
     expect(refreshToken.expiresIn).toBe(expiresIn);
     expect(refreshToken.userId).toBe(user.id);
     

@@ -3,6 +3,7 @@ import { User } from "./User";
 describe('Create User', () => {
   it('should create a user', () => {
     const datasUser = {
+      id: 'any_id',
       email: 'anyEmail@gmail.com',
       username: 'any_username',
       password: 'Any_pass@123',
@@ -12,6 +13,7 @@ describe('Create User', () => {
     const { errors, valid } = user.isValid();
 
     expect(user).toHaveProperty('id');
+    expect(user.id).toBe(datasUser.id);
     expect(user.email).toBe(datasUser.email);
     expect(user.username).toBe(datasUser.username);
     expect(user.password).toBe(datasUser.password);
