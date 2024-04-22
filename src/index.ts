@@ -1,5 +1,6 @@
 import express, { Express } from 'express';
 import { router as userRoutes } from './routes/userRoutes';
+import { router as authRoutes } from './routes/authRoutes';
 
 class AppController {
   app: Express;
@@ -12,6 +13,7 @@ class AppController {
 
   routes () {
     this.app.use('/users', userRoutes);
+    this.app.use('/auth', authRoutes);
   };
 
   cors () {
