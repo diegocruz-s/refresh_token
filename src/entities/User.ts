@@ -9,6 +9,7 @@ export interface IDatasCreateUser {
   email: string;
   username: string;
   password: string;
+  id?: string;
 };
 
 export class User {
@@ -17,8 +18,8 @@ export class User {
   readonly username: string;
   readonly password: string;
 
-  constructor ({ email, password, username }: IDatasCreateUser) {
-    this._id = randomUUID();
+  constructor ({ email, password, username, id }: IDatasCreateUser) {
+    this._id = id || randomUUID();
     this.email = email;
     this.username = username;
     this.password = password;

@@ -2,7 +2,8 @@ import { randomUUID } from "crypto";
 
 export interface IDatasRefreshToken {
   expiresIn: Date;
-  userId: string
+  userId: string;
+  id?: string;
 };
 
 export interface IReturnValidation {
@@ -15,8 +16,8 @@ export class RefreshToken {
   readonly expiresIn: Date;
   readonly userId: string;
 
-  constructor({ expiresIn, userId }: IDatasRefreshToken) {
-    this._id = randomUUID();
+  constructor({ expiresIn, userId, id }: IDatasRefreshToken) {
+    this._id = id || randomUUID();
     this.expiresIn = expiresIn;
     this.userId = userId;
   };
