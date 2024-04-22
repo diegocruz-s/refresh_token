@@ -5,6 +5,7 @@ import { validation } from "../../helpers/validation";
 import { ErrorHandler } from "../errors/ErrorHandler";
 import { HttpRequest, HttpResponse } from "../globalInterfaces";
 import { ICreateUserController, ICreateUserUseCase, IReturnCreateUser } from "./protocols";
+import { badRequest } from '../../helpers/ReturnErrors';
 
 const createUserSchema = z.object({
   email: z.string().email(),
@@ -28,12 +29,7 @@ export class CreateUserController implements ICreateUserController {
       });
 
       if(checkValidationBody.errors) {
-        return {
-          statusCode: 422,
-          body: {
-            errors: checkValidationBody.errors,
-          },
-        };
+        return badRequest(checkValidationBody.errors);
       };
 
       const { userId } = await this.createUserUseCase.execute(body!);

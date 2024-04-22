@@ -8,8 +8,8 @@ export interface IDatasRequestAuthenticate {
 };
 
 export interface IDatasResponseAuthenticate {
-  token: string | null;
-  refreshToken: RefreshToken | null;
+  token?: string;
+  refreshToken?: RefreshToken ;
   errors: string[] | null;
 };
 
