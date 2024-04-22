@@ -3,7 +3,6 @@ export interface HttpResponse<T> {
   body: T;
 };
 
-
 export interface HttpRequest<T> {
   body?: T;
 };

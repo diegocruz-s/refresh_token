@@ -22,5 +22,14 @@ export interface IAuthenticateUseCase {
 };
 
 export interface IAuthenticateRepository {
-  findUserByEmail(email: string): Promise<User>;
+  findUserByEmail(email: string): Promise<User | null>;
+  createRefreshToken(userId: string, expiresIn: Date): Promise<RefreshToken>;
+};
+
+export interface ICompareHashPassword {
+  execute(hash: string, password: string): Promise<boolean>;
+};
+
+export interface IGenerateToken {
+  execute(id: string, secret: string, expiresIn: string): Promise<string>;
 };
