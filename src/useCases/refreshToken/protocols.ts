@@ -18,4 +18,5 @@ export interface IRefreshTokenUseCase {
 export interface IRefreshTokenRepository {
   findRefreshTokenById(id: string): Promise<RefreshToken | null>;
   createRefreshToken(userId: string, expiresIn: Date): Promise<RefreshToken>;
+  deleteRefreshTokenByUserId(userId: string): Promise<void>;
 };

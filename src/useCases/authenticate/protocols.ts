@@ -30,6 +30,3 @@ export interface ICompareHashPassword {
   execute(hash: string, password: string): Promise<boolean>;
 };
 
-export interface IGenerateToken {
-  execute(id: string, secret: string, expiresIn: string): Promise<string>;
-};
