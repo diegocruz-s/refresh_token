@@ -6,8 +6,8 @@ import { MapperPrisma } from "./mappers/MapperPrisma";
 
 export class PrismaAuthenticateRepository implements IAuthenticateRepository {
   constructor(
-    private readonly prismaClient: PrismaClient
-  ) {}
+    private readonly prismaClient: PrismaClient,
+  ) {};
 
   async createRefreshToken(userId: string, expiresIn: Date): Promise<RefreshToken> {
     const refreshToken = await this.prismaClient.refreshToken.create({

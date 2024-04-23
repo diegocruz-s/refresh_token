@@ -4,15 +4,15 @@ import { ICreateUserRepository } from "../../useCases/createUser/protocols";
 
 export class PrismaCreateUserRepository implements ICreateUserRepository {
   constructor(
-    private readonly prismaClient: PrismaClient
-  ) {}
+    private readonly prismaClient: PrismaClient,
+  ) {};
 
   async createUser(user: User): Promise<string> {
     const { email, id, password, username } = user;
     const newUser = await this.prismaClient.user.create({
       data: {
         id, email, password, username
-      }
+      },
     });
 
     return newUser.id;
