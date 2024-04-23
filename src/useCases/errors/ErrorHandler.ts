@@ -7,7 +7,9 @@ export interface IReturnError {
 
 export class ErrorHandler {
   async execute (error: Error): Promise<IReturnError> {    
-    const statusCode = error.name === 'ValidationError' ? 422 : 500;
+    let statusCode = 500;
+    if(error.name === 'Not Found') statusCode = 404;
+    if(error.name === 'ValidationError') statusCode = 422;
 
     return {
       statusCode,

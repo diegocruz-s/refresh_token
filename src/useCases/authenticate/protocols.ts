@@ -9,7 +9,7 @@ export interface IDatasRequestAuthenticate {
 
 export interface IDatasResponseAuthenticate {
   token?: string;
-  refreshToken?: RefreshToken ;
+  refreshToken?: RefreshToken;
   errors: string[] | null;
 };
 
