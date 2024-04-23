@@ -74,4 +74,26 @@ describe('Refresh Token Controller', () => {
     expect(body.refreshToken?.userId).toBe(user.id);
     expect(body.refreshToken?.expiresIn.getTime()).toBeGreaterThan(dateNow);
   });
+
+  it('should return a error when refresh token id is not provided', async () => {
+    const { refreshTokenController } = makeControllerWithMocks();
+
+    const { body, statusCode } = await refreshTokenController.handle({});
+
+    expect(statusCode).toBe(422);
+    expect(body.errors![0]).toBe('Refresh token id is required!');
+  });
+
+  it('should return a error when useCase return a error', async () => {
+    const { refreshTokenController } = makeControllerWithMocksFailed();
+
+    const { body, statusCode } = await refreshTokenController.handle({
+      body: {
+        refresh_token_id: 'any',
+      },
+    });
+
+    expect(statusCode).toBe(404);
+    expect(body.errors![0]).toBe('Refresh token not found!');
+  });
 });
