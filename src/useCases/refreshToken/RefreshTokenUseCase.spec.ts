@@ -1,7 +1,12 @@
+import * as dotenv from 'dotenv';
+dotenv.config({
+    path: '.env.testing',
+});
+
 import { randomUUID } from "crypto";
 import { RefreshToken } from "../../entities/RefreshToken";
 import { createUser } from "../../tests/factories/CreateUser";
-import { IGenerateToken } from "../globalInterfaces";
+import { IFormateDate, IGenerateToken } from "../globalInterfaces";
 import { RefreshTokenUseCase } from "./RefreshTokenUseCase";
 import { IRefreshTokenRepository } from "./protocols";
 
@@ -11,6 +16,21 @@ const firstRefreshToken = new RefreshToken({
   id: randomUUID(),
   expiresIn: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
 });
+
+const makeFakeFormatDate = () => {
+  class FormatDate implements IFormateDate {
+    async execute(date: Date, timeToIncrease: string): Promise<Date> {
+      return new Date(Date.now() + 2 * 1000 * 60 * 60 * 24);
+    };
+  };
+
+  const formatDate = new FormatDate();
+
+  return {
+    formatDate,
+  };
+};
+
 
 const makeFakeGenerateToken = () => {
   class GenerateToken implements IGenerateToken {
@@ -68,7 +88,10 @@ const makeFakeRepository = () => {
 const makeUseCaseWithMocks = () => {
   const { refreshTokenRepository } = makeFakeRepository();
   const { generateToken } = makeFakeGenerateToken();
-  const refreshTokenUseCase = new RefreshTokenUseCase(refreshTokenRepository, generateToken);
+  const { formatDate } = makeFakeFormatDate();
+  const refreshTokenUseCase = new RefreshTokenUseCase(
+    refreshTokenRepository, generateToken, formatDate,
+  );
 
   return {
     refreshTokenUseCase,

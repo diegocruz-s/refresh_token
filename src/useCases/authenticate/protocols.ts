@@ -1,6 +1,6 @@
 import { RefreshToken } from "../../entities/RefreshToken";
 import { User } from "../../entities/User";
-import { HttpRequest, HttpResponse } from "../globalInterfaces";
+import { HttpRequest, HttpResponse, IRefreshTokenCreateDeleteRepository } from "../globalInterfaces";
 
 export interface IDatasRequestAuthenticate {
   email: string;
@@ -21,9 +21,8 @@ export interface IAuthenticateUseCase {
   execute(datas: IDatasRequestAuthenticate): Promise<Omit<IDatasResponseAuthenticate, 'errors'>>
 };
 
-export interface IAuthenticateRepository {
+export interface IAuthenticateRepository extends IRefreshTokenCreateDeleteRepository {
   findUserByEmail(email: string): Promise<User | null>;
-  createRefreshToken(userId: string, expiresIn: Date): Promise<RefreshToken>;
 };
 
 export interface ICompareHashPassword {

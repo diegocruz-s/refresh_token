@@ -1,5 +1,5 @@
 import { RefreshToken } from "../../entities/RefreshToken";
-import { HttpRequest, HttpResponse } from "../globalInterfaces";
+import { HttpRequest, HttpResponse, IRefreshTokenCreateDeleteRepository } from "../globalInterfaces";
 
 export interface IReturnResponseRefreshToken {
   token?: string;
@@ -15,8 +15,6 @@ export interface IRefreshTokenUseCase {
   execute(refresh_token_id: string): Promise<Omit<IReturnResponseRefreshToken, 'errors'>>;
 };
 
-export interface IRefreshTokenRepository {
+export interface IRefreshTokenRepository extends IRefreshTokenCreateDeleteRepository {
   findRefreshTokenById(id: string): Promise<RefreshToken | null>;
-  createRefreshToken(userId: string, expiresIn: Date): Promise<RefreshToken>;
-  deleteRefreshTokenByUserId(userId: string): Promise<void>;
 };

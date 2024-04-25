@@ -19,7 +19,7 @@ export async function checkAuthenticate (req: Request, res: Response, next: Next
       });
     };
 
-    verify(token, 'any_secret_token');
+    verify(token, process.env.TOKEN_SECRET!);
 
     next();
 

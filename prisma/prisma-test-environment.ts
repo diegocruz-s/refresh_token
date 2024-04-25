@@ -10,6 +10,7 @@ const execSync = util.promisify(exec);
 
 export default class PrismaTestEnvironment extends NodeEnvironment {
   public stringConnection: string;
+  public expiresRefreshToken: string;
   private prisma!: PrismaClient;
 
   constructor(config: any, context: any) {
@@ -20,8 +21,10 @@ export default class PrismaTestEnvironment extends NodeEnvironment {
     const dbHost = process.env.DATABASE_HOST;
     const dbPort = process.env.DATABASE_PORT;
     const dbName = process.env.DATABASE_NAME;
+    const expiresRT = process.env.EXPIRE_DATE_REFRESH_TOKEN_TEST;
 
     this.stringConnection = `mysql://${dbUser}:${dbPass}@${dbHost}:${dbPort}/${dbName}`;
+    this.expiresRefreshToken = expiresRT!;
     this.prisma = new PrismaClient();
     
   };
@@ -30,6 +33,7 @@ export default class PrismaTestEnvironment extends NodeEnvironment {
     
     process.env.DATABASE_URL = this.stringConnection
     this.global.process.env.DATABASE_URL = this.stringConnection
+    this.global.process.env.EXPIRE_DATE_REFRESH_TOKEN = this.expiresRefreshToken
 
     await execSync(`prisma migrate deploy`)
 

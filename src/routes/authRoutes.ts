@@ -18,7 +18,7 @@ router.post('/', async (req, res) => {
 
 router.post('/refresh_token', async (req, res) => {
   const { refreshTokenController } = factoryRefreshTokenController();
-
+  
   const { statusCode, body } = await refreshTokenController.handle({
     body: req.body,
   });

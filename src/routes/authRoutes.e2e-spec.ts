@@ -1,7 +1,8 @@
 import request from 'supertest';
+
 import { appController } from '..';
-import { createUser } from '../tests/factories/CreateUser';
 import { prismaClient } from '../database/prisma';
+
 const app = appController.app;
 
 const dateNow = Date.now();

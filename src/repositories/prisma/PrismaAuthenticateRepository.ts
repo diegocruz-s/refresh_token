@@ -34,4 +34,12 @@ export class PrismaAuthenticateRepository implements IAuthenticateRepository {
 
     return userEntity;
   };
+
+  async deleteRefreshTokenByUserId(userId: string): Promise<void> {
+    await this.prismaClient.refreshToken.deleteMany({
+      where: {
+        userId,
+      },
+    });
+  };
 };

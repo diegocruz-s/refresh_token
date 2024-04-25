@@ -32,11 +32,15 @@ export class RefreshToken {
       errors.push('Property userId is missing!');
     };
 
-    const isValidExpiresIn = this.expiresIn.getTime() > Date.now(); 
+    if (!this.expiresIn) {
+      errors.push('Property expiresIn is missing!');
+    } else {
+        const isValidExpiresIn = this.expiresIn.getTime() > Date.now(); 
 
-    if (!isValidExpiresIn || !this.expiresIn) {
-      errors.push('Property expiresIn must be greater than now!');
-    };
+        if (!isValidExpiresIn) {
+            errors.push('Property expiresIn must be greater than now!');
+        };
+    }
 
     return {
       errors: errors.length > 0 ? errors : null,

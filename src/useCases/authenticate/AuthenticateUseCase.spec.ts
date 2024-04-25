@@ -1,15 +1,41 @@
+import * as dotenv from 'dotenv';
+dotenv.config({
+    path: '.env.testing',
+});
+
 import { RefreshToken } from "../../entities/RefreshToken";
 import { User } from "../../entities/User";
 import { createUser } from "../../tests/factories/CreateUser";
+import { IFormateDate, IGenerateToken } from "../globalInterfaces";
 import { AuthenticateUseCase } from "./AuthenticateUseCase";
-import { IAuthenticateRepository, ICompareHashPassword, IGenerateToken } from "./protocols";
+import { IAuthenticateRepository, ICompareHashPassword } from "./protocols";
 
 const { user } = createUser({});
+const refreshToken = new RefreshToken({
+  expiresIn: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
+  userId: user.id,
+});
+
 const dateNow = Date.now();
+
+const makeFakeFormatDate = () => {
+  class FormatDate implements IFormateDate {
+    async execute(date: Date, timeToIncrease: string): Promise<Date> {
+      return new Date(Date.now() + 2 * 1000 * 60 * 60 * 24);
+    };
+  };
+
+  const formatDate = new FormatDate();
+
+  return {
+    formatDate,
+  };
+};
 
 const makeFakeRepository = () => {
   class AuthenticateRepository implements IAuthenticateRepository {
     private users: User[] = [user];
+    public refreshToken: RefreshToken[] = [refreshToken];
 
     async createRefreshToken(userId: string, expiresIn: Date): Promise<RefreshToken> {
       const newRefreshToken = new RefreshToken({
@@ -20,6 +46,8 @@ const makeFakeRepository = () => {
 
       if(!valid) throw new Error('Error generate refresh token!');
 
+      this.refreshToken.push(newRefreshToken);
+
       return newRefreshToken;
     };
 
@@ -29,6 +57,10 @@ const makeFakeRepository = () => {
       if(!findUser) return null;
 
       return findUser;
+    };
+
+    async deleteRefreshTokenByUserId(userId: string): Promise<void> {
+      this.refreshToken = this.refreshToken.filter(rT => rT.userId !== userId);
     };
 
   };
@@ -75,20 +107,23 @@ const makeControllerWithMocks = () => {
   const { authenticateRepository } = makeFakeRepository();
   const { compareHashPassword } = makeCompareHashPassword();
   const { generateToken } = makeGenerateToken();
+  const { formatDate } = makeFakeFormatDate();
   const authenticateUseCase = new AuthenticateUseCase(
     authenticateRepository,
     compareHashPassword,
     generateToken,
+    formatDate
   );
 
   return {
     authenticateUseCase,
+    authenticateRepository,
   };
 };
 
 describe('Authenticate Use Case', () => {
   it('should return a token and refreshToken', async () => {
-    const { authenticateUseCase } = makeControllerWithMocks();
+    const { authenticateUseCase, authenticateRepository } = makeControllerWithMocks();
 
     const datasLogin = {
       email: user.email,
@@ -100,6 +135,7 @@ describe('Authenticate Use Case', () => {
     expect(token).toBeTruthy();
     expect(refreshToken?.userId).toBe(user.id);
     expect(refreshToken?.expiresIn.getTime()).toBeGreaterThan(dateNow);
+    expect(authenticateRepository.refreshToken.length).toBe(1);
   });
 
   it('should return a error when user not exists', async () => {

@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import express, { Express } from 'express';
 import { router as userRoutes } from './routes/userRoutes';
 import { router as authRoutes } from './routes/authRoutes';
@@ -16,7 +17,7 @@ class AppController {
     this.app.use('/auth', authRoutes);
   };
 
-  cors () {
+  cors () {   
     // Implement CORS
   };
 

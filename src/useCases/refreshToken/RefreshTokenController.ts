@@ -10,7 +10,7 @@ export class RefreshTokenController implements IRefreshTokenController {
 
   async handle(httpRequest: HttpRequest<{ refresh_token_id: string }>): Promise<HttpResponse<IReturnResponseRefreshToken>> {
     try {
-      const { body } = httpRequest;
+      const { body } = httpRequest;      
   
       if(!body || !body.refresh_token_id) {
         return badRequest(['Refresh token id is required!']);
@@ -26,10 +26,14 @@ export class RefreshTokenController implements IRefreshTokenController {
           token,
         },
       };
-    } catch (error: any) {      
+    } catch (error: any) {            
       if(
         error.message.includes('not found')
       ) error.name = 'Not Found';
+
+      if(
+        error.message.includes('expired')
+      ) error.name = 'ValidationError';
 
       const errorHandler = new ErrorHandler();
       const { body, statusCode } = await errorHandler.execute(error);

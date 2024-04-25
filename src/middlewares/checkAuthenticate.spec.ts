@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import { randomUUID } from "crypto";
 import { Request, Response, NextFunction } from "express";
 import { sign } from "jsonwebtoken";
@@ -20,7 +21,7 @@ describe('Authenticate Middleware', () => {
     const userIdTest = randomUUID();
     const tokenTest = sign({ 
       id: userIdTest 
-    }, 'any_secret_token', {
+    }, process.env.TOKEN_SECRET!, {
       expiresIn: '2d',
     });
 
